@@ -1,0 +1,127 @@
+<html>
+
+<head>
+	<title>StringInterpolate</title>
+	<link rel="stylesheet" type="text/css" href="common.css">
+	<style type='text/css'>
+		/* placeholder */
+	</style>
+	<script language='javascript'>
+		function $(id) { return document.getElementById(id); }
+
+		function add_column() {
+			var tr = $('columns');
+			var td = tr.insertCell(-1);
+			td.vAlign = 'top';
+			var n = tr.cells.length;
+			
+			var html = '';
+			html += "<center>";
+			html += "<span class='label'>$" + n + "</span><br>";
+			html += "<input type='radio' name='radio" + n + "' value='1' onclick='radio_changed(" + n + ")' checked><span class='small_label'> List </span> &nbsp; ";
+			html += "<input type='radio' name='radio" + n + "' value='2' onclick='radio_changed(" + n + ")'><span class='small_label'> Formula </span>";
+			html += "</center>";
+			html += "<div id='div" + n +"'></div>";
+			td.innerHTML = html;
+			radio_changed(n);
+			
+			var w = 100 / tr.cells.length;
+			for (var i=0; i<tr.cells.length; i++) {
+				var c = tr.cells[i];
+				c.width = w + '%';
+			}
+		}
+		
+		function get_list_html(n) {
+			var html = "";
+			html += "<div class='box-border'>"
+			html += "<textarea id='list" + n + "' class='box'></textarea>"
+			html += "</div>"
+			return html;
+		}
+		
+		function get_formula_html(n) {
+			var params = ['row'];
+			
+			if (n === 2) {
+				params.push("cells[0]");
+			} else if (n !== 1) {
+				params.push("cells[0.." + (n-2) + "]");
+			}
+			
+			var html = "";
+			html += "<div class='box-border'>"
+			html += "<span class='small_label'>function evaluate(" + params.join(', ') + ") {</span><br>";
+			html += "<textarea id='formula" + n + "' class='short_box'></textarea>"
+			html += "<span class='small_label'>}</span>";
+			html += "</div>";
+			html += "<center><input type=button value='Preview' class='small_btn' onclick='preview("+n+");'/></center>";
+			html += "<div class='preview' id='preview" + n + "'> </div>";
+			return html;
+		}
+		
+		function radio_changed(n) {
+			var radios = document.getElementsByName('radio' + n);
+			var as_list = radios[0].checked;
+			
+			if (as_list) {
+				$('div'+n).innerHTML = get_list_html(n);
+			} else {
+				$('div'+n).innerHTML = get_formula_html(n);
+			}
+		}
+		
+		function evaluate(n, row) {
+		}
+		
+		function preview(n) {
+			var formula = $('formula' + n).value;
+			$('preview' + n).innerHTML = formula;
+		}
+	</script>
+</head>
+<body>
+
+<script src='header.js'></script>
+
+<h1 class='title'>&#9783; StringInterpolate &#9783;</h1>
+
+<div class='box-border'>
+	<span class='box-label'>Template</span>
+	<textarea id='template' class='box'></textarea>
+</div>
+<br>
+
+<table width=100%>
+<tr id='columns'></tr>
+</table>
+
+<script language='javascript'>
+add_column();
+add_column();
+</script>
+
+
+<table width=100%>
+	<tr>
+		<td width=33%>
+			
+		</td>
+		<td align=center>
+			<input type=button value='Interpolate' class='btn' onclick=''/>
+		</td>
+		<td align=right width=33%>
+			<input type=button value='+' class='btn' onclick='add_column();'/>
+		</td>
+	</tr>
+</table>
+
+<br>
+<div class='box-border'>
+	<span class='box-label'>Output</span>
+	<textarea id='output' class='box'></textarea>
+</div>
+
+</body>
+
+</html>

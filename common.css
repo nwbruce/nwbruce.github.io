@@ -1,0 +1,98 @@
+
+h1.title {
+	font-family: Monaco, Consolas, Courier New;
+	font-size: 18pt;
+	text-align: center;
+	color: navy;
+}
+
+body {
+	background-color: white;
+}
+
+span.box-label {
+	margin-top: -20px;
+	display: block;
+	background-color: white;
+	float:left;
+	font-family: Monaco, Consolas, Courier New;
+	padding: 2px 5px 2px 5px;
+	color: black;
+}
+
+div.box-border {
+	border:1px solid silver;
+	border-radius: 3px;
+	padding: 9px;
+}
+
+textarea.box {
+	width: 100%;
+	height: 250px;
+	font-family: Monaco, Consolas, Courier New;
+	font-size: 10pt;
+	border: none;
+	resize: none;
+	outline: none;
+}
+
+textarea.short_box {
+	width: 100%;
+	height: 90px;
+	font-family: Monaco, Consolas, Courier New;
+	font-size: 10pt;
+	border: none;
+	resize: none;
+	outline: none;
+}
+
+div.preview {
+	width: 100%;
+	height: 96px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+input.btn {
+	font-family: Monaco, Consolas, Courier New;
+	font-size: 14pt;
+	background: navy;
+	padding: 10px 20px 10px 20px;
+	border: none;
+	border-radius: 15px;
+	color: #fff;
+	cursor: pointer;
+	cursor: hand;
+}
+input.small_btn {
+	font-family: Monaco, Consolas, Courier New;
+	font-size: 9pt;
+	background: navy;
+	padding: 6px 13px 6px 13px;
+	border: none;
+	border-radius: 10px;
+	color: #fff;
+	cursor: pointer;
+	cursor: hand;
+}
+
+.label {
+	font-family: Monaco, Consolas, Courier New;
+	font-size: 14pt;
+}
+
+.small_label {
+	font-family: Monaco, Consolas, Courier New;
+	font-size: 10pt;
+}
+
+input.fixed-text {
+	font-family: Monaco, Consolas, Courier New;
+	font-size: 10pt;
+	width: 100%;
+}	
+
+select.drop {
+	font-family: Monaco, Consolas, Courier New;
+	font-size: 10pt;
+}

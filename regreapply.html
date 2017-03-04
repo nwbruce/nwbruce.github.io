@@ -1,0 +1,127 @@
+<html>
+
+<head>
+	<title>RegReApply</title>
+	<link rel="stylesheet" type="text/css" href="common.css">
+	<style type='text/css'>
+		th {
+			font-family: Monaco, Consolas, Courier New;
+			font-size: 12pt;
+		}
+	</style>
+	<script language='javascript'>
+		var REGEX_COUNT = 0;
+		function $(id) {
+			return document.getElementById(id);
+		}
+		function apply_click(e) {
+			result = $('input').value
+			
+			for (i = 1; i <= REGEX_COUNT; i++) {
+				find1 = $('find' + i).value
+				replace1 = $('replace' + i).value
+				i1 = $('i' + i).checked ? 'i' : '';
+				g1 = $('g' + i).checked ? 'g' : '';
+				m1 = $('m' + i).checked ? 'm' : '';
+				
+				try {
+					r = new RegExp(find1, i1 + g1 + m1);
+				} catch (e) {
+					if (e instanceof SyntaxError) {
+						result = "Error in row " + i + ".\n" + e;
+						$('output').style.color = 'red';
+						$('output').value = result
+						return;
+					} else {
+						throw e;
+					}
+				}
+				result = result.replace(r, replace1);
+			}
+			
+			$('output').style.color = 'black';
+			$('output').value = result
+		}
+		function add_row() {
+			REGEX_COUNT += 1;
+			i = REGEX_COUNT;
+
+			var table = $("tbl");
+
+			var row = table.insertRow(-1);
+
+			for (var x = 0; x < 6; x++) {
+				row.insertCell(-1);
+			}
+
+			row.cells[0].className = 'small_label';
+			row.cells[0].align = 'right';
+			row.cells[0].width = 30;
+			
+			for (var x = 3; x < 6; x++) {
+				row.cells[x].width = 20;
+				row.cells[x].align = 'center'
+			}
+
+            row.cells[0].innerHTML = i + ")";
+			row.cells[1].innerHTML = '<input type=text class="fixed-text" name="find' + i + '" id="find' + i + '"/>';
+			row.cells[2].innerHTML = '<input type=text class="fixed-text" name="replace' + i + '" id="replace' + i + '" />';
+			row.cells[3].innerHTML = '<input type=checkbox name="i' + i + '" id="i' + i + '"/>';
+			row.cells[4].innerHTML = '<input type=checkbox name="g' + i + '" id="g' + i + '" checked/>';
+			row.cells[5].innerHTML = '<input type=checkbox name="m' + i + '" id="m' + i + '"/>';
+		}
+	</script>
+</head>
+
+<body>
+
+<script src='header.js'></script>
+
+<h1 class='title'>&#9783; RegReApply &#9783;</h1>
+
+
+<div class='box-border'>
+	<span class='box-label'>Input</span>
+	<textarea id='input' class='box'></textarea>
+</div>
+
+
+<p>
+	<span>
+		<table align=center id='tbl' width=100%>
+			<tr>
+				<th></th>
+				<th>Find</th>
+				<th>Replace</th>
+				<th><span title='Ignore case'>I</span></th>
+				<th><span title='Global (all matches)'>G</span></th>
+				<th><span title='Multiline'>M</span></th>
+			</tr>
+		</table>
+		<script language='javascript'>
+			add_row();
+		</script>
+	</span>
+</p>
+
+<table width=100%>
+	<tr>
+		<td width=33%>
+		</td>
+		<td align=center>
+			<input type=button value='Apply' class='btn' onclick='apply_click(event);'/>
+		</td>
+		<td align=right width=33%>
+			<input type=button value='+' class='btn' onclick='add_row();'/>
+		</td>
+	</tr>
+</table>
+<br>
+<div class='box-border'>
+	<span class='box-label'>Output</span>
+	<textarea id='output' readonly class='box'></textarea>
+</div>
+
+</body>
+
+</html>

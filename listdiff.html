@@ -1,0 +1,224 @@
+<html>
+
+<head>
+	<title>ListDiff</title>
+	<link rel="stylesheet" type="text/css" href="common.css">
+	<style type='text/css'>
+		th {
+			font-family: Monaco, Consolas, Courier New;
+			font-size: 12pt;
+			text-align: center;
+			background-color: #cfcfcf;
+		}
+		td.matched {
+			font-size: 10pt;
+			font-family: Monaco, Consolas, Courier New;
+			text-align: center;
+		}
+		td.missing {
+			background-color: pink;
+		}
+	</style>
+	<script language='javascript'>
+		function $(id) {
+			return document.getElementById(id);
+		}
+		
+		function comparitor(a, b) {
+			var ignore_case = $('ignore_case').checked;
+			var trim = $('trim').checked;
+
+			if (ignore_case) {
+				a = a.toLowerCase();
+				b = b.toLowerCase();
+			}
+			
+			if (trim) {
+				a = a.trim();
+				b = b.trim();
+			}
+
+			return a.localeCompare(b);
+		}
+		
+		function pop_top_row(lists) {
+			var candidates = new Set();
+			for (i=0; i < lists.length; i++) {
+				if (lists[i].length > 0) {
+					var bottom = lists[i][lists[i].length-1];
+					if (candidates.size == 0) {
+						candidates.add(i);
+					} else {
+						var one = candidates.values().next().value;
+						var reference = lists[one][lists[one].length-1];
+						var compare = comparitor(bottom, reference);
+						if (compare < 0) {
+							candidates.clear();
+							candidates.add(i);
+						} else if (compare === 0) {
+							candidates.add(i);
+						}
+					}
+				}
+			}
+			var has_one = false;
+			var result = new Array();
+			for (i=0; i < lists.length; i++) {
+				if (candidates.has(i)) {
+					has_one = true;
+					result.push(lists[i].pop());
+				} else {
+					result.push(null);
+				}
+			}
+			if (!has_one)
+				return null;
+			else
+				return result;
+		}
+		
+		function apply_click(e) {
+			var count = $('lists').rows[0].cells.length;
+			var show = $('show').value;
+			
+			var lists = new Array();
+			for (i = 1; i <= count; i++) {
+				var block = $('list' + i).value;
+				var l = block.trim().split('\n').sort(comparitor).reverse();
+				if (l.length == 1 && l[0].length == 0) {
+					l = new Array();
+				}
+				lists.push(l);
+			}
+			
+			var html = "<table border=1 align=center>";
+			
+			html += "<tr>";
+			for (i = 1; i <= count; i++) {
+				html += "<th>List " + i + "</th>";
+			}
+			html += "</tr>";
+			
+			var count_same = 0;
+			var count_diff = 0;
+			while ( (top_row = pop_top_row(lists)) != null) {
+				var different = false;
+				for (s of top_row) {
+					if (s == null) {
+						different = true;
+						break;
+					}
+				}
+				
+				if (different) {
+					count_diff++;
+				} else {
+					count_same++;
+				}
+				
+				var print = true;
+				if (show != 3) {
+					if (show == 1 && !different) {
+						print = true;
+					} else if (show == 2 && different) {
+						print = true;
+					} else {
+						print = false;
+					}
+				}
+				
+				if (print) {
+					html += "<tr>";
+					for (s of top_row) {
+						if (s != null) {
+							html += "<td class='matched'>";
+							html += s;
+							html += "</td>";
+						} else {
+							html += "<td class='missing'>";
+							html += " ";
+							html += "</td>";
+						}
+					}
+					html += "</tr>";
+				}
+			}
+			
+			html += "</table>";
+			
+			var summary = "<center><span class='small_label'>";
+			summary += "Matched: " + count_same + "<br>";
+			summary += "Unmatched: " + count_diff;
+			summary += "</span></center>";
+			summary += "<br>";
+			
+			html = summary + html;
+			
+			$('output').innerHTML = html;
+		}
+		
+		function add_list(body="") {
+			var table = $('lists');
+			var row = table.rows[0];
+			
+			var cell = row.insertCell(-1);
+			
+			var i = row.cells.length;
+			
+			var html = '';
+			html += "<div class='box-border'>";
+			html += "<span class='box-label'>List " + i + "</span>";
+			html += "<textarea id='list" + i + "' class='box'>" + body + "</textarea>";
+			html += "</div>"
+			
+			cell.innerHTML = html;
+		}
+	</script>
+</head>
+
+<body>
+
+<script src='header.js'></script>
+
+<h1 class='title'>&#9783; ListDiff &#9783;</h1>
+
+<table id='lists' width=100%><tr></tr></table>
+
+
+<script language='javascript'>
+add_list();
+add_list();
+</script>
+
+<table width=100%>
+	<tr>
+		<td width=33%>
+			<table width=100%>
+				<tr>
+					<td><span class='small_label'>Show:</span>
+						<select id='show' class='drop'>
+							<option value=3>Both</option>
+							<option value=2>Unmatched</option>
+							<option value=1>Matched</option>
+						</select> 
+					</td>
+					<td><input type='checkbox' name='i' id='ignore_case'> <span class='small_label'>Ignore case</span></td>
+					<td><input type='checkbox' name='t' id='trim'> <span class='small_label'>Trim</span></td>
+				</tr>
+			</table>
+		</td>
+		<td align=center>
+			<input type=button value='Compare' class='btn' onclick='apply_click(event);'/>
+		</td>
+		<td align=right width=33%>
+			<input type=button value='+' class='btn' onclick='add_list();'/>
+		</td>
+	</tr>
+</table>
+<br>
+<div id='output'>
+</div>
+
+</body>
+
+</html>
