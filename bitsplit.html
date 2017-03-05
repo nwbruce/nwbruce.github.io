@@ -1,0 +1,18 @@
+<html ng-app="bitsplitApp">
+<head>
+	<!--<script src="angular-1.6.2/angular.js"></script>-->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js"></script>
+	<script src="bitsplit.js"></script>
+	<title>BitSplit</title>
+</head>
+<body ng-controller="bitsplitControl">
+	<select ng-model="bitCount">
+		<option value='8'>8 bits</option>
+		<option value='16'>16 bits</option>
+		<option value='32'>32 bits</option>
+		<option value='64'>64 bits</option>
+	</select>
+	<br><br>
+	{{ bitCount }}
+</body>
+</html>
