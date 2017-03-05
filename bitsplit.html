@@ -6,6 +6,7 @@
 	<title>BitSplit</title>
 </head>
 <body ng-controller="bitsplitControl">
+	<input type='text' placeholder='0' ng-model='bitValue'> 
 	<select ng-model="bitCount">
 		<option value='8'>8 bits</option>
 		<option value='16'>16 bits</option>
@@ -13,6 +14,17 @@
 		<option value='64'>64 bits</option>
 	</select>
 	<br><br>
-	{{ bitCount }}
+	<table border=1>
+		<tr>
+			<td ng-repeat='bit in range(bitCount)'>{{bit}}</td>
+		</tr>
+		<tr>
+			<td ng-repeat='bit in range(bitCount)'>{{getBit(bit)}}</td>
+		</tr>
+		<tr>
+			<td ng-repeat='bit in range(bitCount)'>{{bitCount-bit-1}}</td>
+		</tr>
+	</table>
+	<div ng-show='overflow()'>*overflow*</div>
 </body>
 </html>
