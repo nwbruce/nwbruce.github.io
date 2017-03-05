@@ -3,28 +3,41 @@
 	<!--<script src="angular-1.6.2/angular.js"></script>-->
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js"></script>
 	<script src="bitsplit.js"></script>
+	<link rel="stylesheet" type="text/css" href="common.css">
 	<title>BitSplit</title>
 </head>
 <body ng-controller="bitsplitControl">
-	<input type='text' placeholder='0' ng-model='bitValue'> 
-	<select ng-model="bitCount">
+	<h1 class='title'>&#9783; BitSplit &#9783;</h1>
+
+	<center>
+	<input type='text' placeholder='0' ng-model='bitValue' class='small_label'> 
+	<select ng-model="bitCount" class='drop'>
 		<option value='8'>8 bits</option>
 		<option value='16'>16 bits</option>
 		<option value='32'>32 bits</option>
 		<option value='64'>64 bits</option>
 	</select>
-	<br><br>
-	<table border=1>
+	</center>
+
+	<br>
+
+	<table border=1 align=center>
 		<tr>
-			<td ng-repeat='bit in range(bitCount)'>{{bit}}</td>
+			<td ng-repeat='bit in range(bitCount)' class='small_label' style='text-align:center;'>
+				{{bit}}
+			</td>
 		</tr>
 		<tr>
-			<td ng-repeat='bit in range(bitCount)'>{{getBit(bit)}}</td>
+			<td ng-repeat='bit in range(bitCount)' class='label' style='text-align:center;'>
+				{{getBit(bit)}}
+			</td>
 		</tr>
 		<tr>
-			<td ng-repeat='bit in range(bitCount)'>{{bitCount-bit-1}}</td>
+			<td ng-repeat='bit in range(bitCount)' class='small_label' style='text-align:center;'>
+				{{bitCount-bit-1}}
+			</td>
 		</tr>
 	</table>
-	<div ng-show='overflow()'>*overflow*</div>
+	<div ng-show='overflow()'><center><i>* overflow *</i></center></div>
 </body>
 </html>
