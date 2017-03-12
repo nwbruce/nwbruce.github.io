@@ -4,17 +4,19 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js"></script>
 	<script src="excelfix.js"></script>
 	<link rel="stylesheet" type="text/css" href="common.css">
-	<title>BitSplit</title>
+	<title>ExcelFix</title>
 </head>
 <body ng-controller="excelfixControl">
 	<h1 class='title'>&#9783; ExcelFix &#9783;</h1>
 
 	<div class='box-border'>
 		<span class='box-label'>Input</span>
-		<textarea ng-model='input' placeholder="Enter text" class='box'></textarea>
+		<textarea ng-model='input' placeholder="Paste text" class='box'></textarea>
 	</div>
-	
-	<input type=button value='Fix' ng-click='fix()'>
+	<br>
+	<center>
+		<input type=button value='Fix' ng-click='fix()' class='btn'>
+	</center>
 
 	<br><br>
 	<div class='box-border'>
