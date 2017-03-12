@@ -64,8 +64,8 @@
 			}
 
             row.cells[0].innerHTML = i + ")";
-			row.cells[1].innerHTML = '<input type=text class="fixed-text" name="find' + i + '" id="find' + i + '"/>';
-			row.cells[2].innerHTML = '<input type=text class="fixed-text" name="replace' + i + '" id="replace' + i + '" />';
+			row.cells[1].innerHTML = '<input type=text class="fixed-text" name="find' + i + '" id="find' + i + '" placeholder="Find"/>';
+			row.cells[2].innerHTML = '<input type=text class="fixed-text" name="replace' + i + '" id="replace' + i + '" placeholder="Replace with"/>';
 			row.cells[3].innerHTML = '<input type=checkbox name="i' + i + '" id="i' + i + '"/>';
 			row.cells[4].innerHTML = '<input type=checkbox name="g' + i + '" id="g' + i + '" checked/>';
 			row.cells[5].innerHTML = '<input type=checkbox name="m' + i + '" id="m' + i + '"/>';
@@ -82,7 +82,7 @@
 
 <div class='box-border'>
 	<span class='box-label'>Input</span>
-	<textarea id='input' class='box'></textarea>
+	<textarea id='input' class='box' placeholder='Enter text'></textarea>
 </div>
 
 
