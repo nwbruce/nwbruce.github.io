@@ -23,21 +23,27 @@
 
 	<table border=1 align=center>
 		<tr>
-			<td ng-repeat='bit in range(bitCount)' class='small_label' style='text-align:center;'>
+			<td ng-repeat='bit in getBits() track by $index' class='small_label' style='text-align:center;'>
+				{{bitCount - $index - 1}}
+			</td>
+		</tr>
+		<tr>
+			<td ng-repeat='bit in getBits() track by $index' ng-class='bit > 0 ? "label_color" : "label"' style='text-align:center;'>
 				{{bit}}
 			</td>
 		</tr>
 		<tr>
-			<td ng-repeat='bit in range(bitCount)' class='label' style='text-align:center;'>
-				{{getBit(bit)}}
-			</td>
-		</tr>
-		<tr>
-			<td ng-repeat='bit in range(bitCount)' class='small_label' style='text-align:center;'>
-				{{bitCount-bit-1}}
+			<td ng-repeat='bit in getBits() track by $index' class='small_label' style='text-align:center;'>
+				{{$index}}
 			</td>
 		</tr>
 	</table>
-	<div ng-show='overflow()'><center><i>* overflow *</i></center></div>
+	<div ng-show='overflow()'><center><em>* overflow *</em></center></div>
+
+
+
+
+
+
 </body>
 </html>

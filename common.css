@@ -81,6 +81,13 @@ input.small_btn {
 	font-size: 14pt;
 }
 
+.label_color {
+	font-family: Monaco, Consolas, Courier New;
+	font-size: 14pt;
+	background: navy;
+	color: #fff;
+}
+
 .small_label {
 	font-family: Monaco, Consolas, Courier New;
 	font-size: 10pt;

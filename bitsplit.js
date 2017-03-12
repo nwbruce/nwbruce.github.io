@@ -3,17 +3,14 @@ var app = angular.module('bitsplitApp', []);
 
 app.controller('bitsplitControl', function ($scope) {
 	$scope.bitCount = '32';
-	
-	$scope.range = function(n) {
+
+	$scope.getBits = function() {
 		var result = new Array();
-		for (var i = parseInt(n)-1; i >= 0; i--) {
-			result.push(i);
+		for (var b = parseInt($scope.bitCount)-1; b >= 0; b--) {
+			var value = (($scope.bitValue & Math.pow(2, b)) > 0) ? 1 : 0;
+			result.push(value);
 		}
 		return result;
-	}
-	
-	$scope.getBit = function(bit) {
-		return (($scope.bitValue & Math.pow(2, bit)) > 0) ? 1 : 0;
 	}
 	
 	$scope.overflow = function() {
