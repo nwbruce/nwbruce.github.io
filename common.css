@@ -103,3 +103,14 @@ select.drop {
 	font-family: Monaco, Consolas, Courier New;
 	font-size: 10pt;
 }
+
+a.homelink {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	font-family: Monaco, Consolas, Courier New;
+	font-size: 10pt;
+	color: navy;
+	text-decoration: none;
+}
+
