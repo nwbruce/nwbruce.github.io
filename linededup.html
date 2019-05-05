@@ -1,0 +1,70 @@
+<html>
+
+<head>
+	<title>ListDiff</title>
+	<link rel="stylesheet" type="text/css" href="common.css">
+	<style type='text/css'>
+		th {
+			font-family: Monaco, Consolas, Courier New;
+			font-size: 12pt;
+			text-align: center;
+			background-color: #cfcfcf;
+		}
+		td.matched {
+			font-size: 10pt;
+			font-family: Monaco, Consolas, Courier New;
+			text-align: center;
+		}
+		td.missing {
+			background-color: pink;
+		}
+	</style>
+	<script language='javascript'>
+		function $(id) {
+			return document.getElementById(id);
+		}
+        
+        function dedup() {
+            var input = $('textbody').value;
+            var lines = input.split('\n');
+            var map = {};
+
+            var output = '';
+            var i;
+            var line;
+            for (i=0; i < lines.length; i++) {
+                line = lines[i];
+                if (!(line in map)) {
+                    output += line + '\n';
+                    map[line] = 1;
+                }
+            }
+            $('output').innerHTML = '<pre>' + output + '</pre>';
+        }
+	</script>
+</head>
+
+<body>
+
+<script src='header.js'></script>
+
+<a href='index.html' class='homelink'>&larr; Gadgetz</a>
+<h1 class='title'>&#9783; LineDedup &#9783;</h1>
+
+
+<div class='box-border'>
+<span class='box-label'>Text</span>
+<textarea id='textbody' class='box' placeholder='Enter lines of text'></textarea>
+</div>
+
+<br>
+<input type=button value='Dedup' class='btn' onclick='dedup()'/>
+
+<br>
+
+<div id='output'>
+</div>
+
+</body>
+
+</html>
