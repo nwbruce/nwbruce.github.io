@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+    <xs:simpleType name="Color">
+        <xs:annotation><xs:documentation>Eye color</xs:documentation></xs:annotation>
+        <xs:restriction type="xs:string">
+            <xs:enumeration name="BROWN" />
+            <xs:enumeration name="BLUE">
+                <xs:annotation><xs:documentation>Blue eyes are best</xs:documentation></xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration name="GREEN" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="Person">
+        <xs:annotation><xs:documentation>A human person</xs:documentation></xs:annotation>
+        <xs:sequence>
+            <xs:element name="name" type="xs:string" />
+            <xs:element name="birthYear" type="xs:int" />
+            <xs:element name="eyeColor" type="Color" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Robot">
+        <xs:sequence>
+            <xs:element name="model" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Character">
+        <xs:choice>
+            <xs:element name="person" type="Person" />
+            <xs:element name="robot" type="Robot" />
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:element name="rootElement" type="Character" />
+
+</xs:schema>
