@@ -16,8 +16,8 @@
         <xs:annotation><xs:documentation>A human person</xs:documentation></xs:annotation>
         <xs:sequence>
             <xs:element name="name" type="xs:string" />
-            <xs:element name="birthYear" type="xs:int" />
-            <xs:element name="eyeColor" type="Color" />
+            <xs:element name="birthYear" type="xs:int" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="eyeColor" type="Color" minOccurs="0" />
         </xs:sequence>
     </xs:complexType>
 
