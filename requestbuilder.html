@@ -3,11 +3,213 @@
 <title>RequestBuilder</title>
 <script language="javascript">
 
+function getDocs(node) {
+    var annotations = node.getElementsByTagName('xs:annotation');
+    var i;
+    var docs;
+    var j;
+    for (i = 0; i < annotations.length; i++) {
+        docs = annotations[i].getElementsByTagName('xs:documentation');
+        for (j = 0; j < docs.length; j++) {
+            return docs[j].textContent;
+        }
+    }
+    return null;
+}
+function firstElement(node, tag) {
+    var list = node.getElementsByTagName(tag);
+    if (list.length > 0) {
+        return list[0];
+    } else {
+        return null;
+    }
+}
+
+function loadSimples(types, xsddom) {
+    var simpleTypeElements = xsddom.getElementsByTagName('xs:simpleType');
+    var e;
+    for (e = 0; e < simpleTypeElements.length; e++) {
+        var elem = simpleTypeElements[e];
+        var result = {
+            'name' : elem.getAttribute('name'),
+            'doc' : getDocs(elem),
+            'structure' : 'ENUM',
+            'enums' : []
+        };
+
+        var restriction = firstElement(elem, 'xs:restriction');
+        if (restriction) {
+            var enums = restriction.getElementsByTagName('xs:enumeration');
+            var e2;
+            for (e2 = 0; e2 < enums.length; e2++) {
+                result.enums.push({
+                    'label' : enums[e2].getAttribute('name'),
+                    'doc' : getDocs(enums[e2])
+                });
+            }
+        }
+        types[result['name']] = result;
+    }
+}
+
+
+function loadElements(list, sequence) {
+    var elems = sequence.getElementsByTagName('xs:element');
+    var e;
+    for (e = 0; e < elems.length; e++) {
+        var elem = elems[e];
+        if (elem.parentElement != sequence) {
+            continue;
+        }
+
+        var result = {
+            'name' : elem.getAttribute('name'),
+            'type' : elem.getAttribute('type'),
+            'doc' : getDocs(elem),
+            'container' : null
+        };
+
+        var maxo = elem.getAttribute('maxOccurs');
+        if (maxo == "unbounded") {
+            result.container = 'ARRAY';
+        }
+
+        var mino = elem.getAttribute('minOccurs');
+        if (mino == '0' && ! result.container) {
+            result.container = 'OPTIONAL';
+        }
+        list.push(result);
+    }
+}
+
+function loadComplexes(types, xsddom) {
+    var complexes = xsddom.getElementsByTagName('xs:complexType');
+    var e;
+    for (e = 0; e < complexes.length; e++) {
+        var elem = complexes[e];
+        var result = {
+            'name' : elem.getAttribute('name'),
+            'doc' : getDocs(elem),
+            'structure' : null,
+            'elements' : []
+        };
+
+        var sequence = firstElement(elem, 'xs:sequence');
+        if (sequence) {
+            result.structure = 'SEQUENCE';
+            loadElements(result.elements, sequence);
+        }
+        var choice = firstElement(elem, 'xs:choice');
+        if (choice) {
+            result.structure = 'CHOICE';
+            loadElements(result.elements, choice);
+        }
+
+        types[result['name']] = result;
+    }
+}
+
+function loadTypes(xsdtext) {
+    var parser = new DOMParser();
+    var xsddom = parser.parseFromString(xsdtext, "text/xml");
+    var types = {};
+    loadSimples(types, xsddom);
+    loadComplexes(types, xsddom);
+    var root = {
+        'name' : '__root__',
+        'doc' : null,
+        'structure' : null,
+        'elements' : []
+    };
+    loadElements(root.elements, xsddom.documentElement);
+    types[root['name']] = root;
+    return types;
+}
+
+function getTypeEntry(t) {
+    console.log(t);
+    var html = '';
+    if (t.structure == 'ENUM') {
+        html += '<select>';
+        var e;
+        for (e in t.enums) {
+            html += '<option>' + t.enums[e].label + '</option>';
+        }
+        html += '</select>';
+    } else if (t.structure == 'SEQUENCE') {
+        
+    }
+    return html;
+}
+
+function tempTypeHtml(types) {
+    var k;
+    var html = '';
+    for (k in types) {
+        html += '<h3>' + k + '</h3>';
+        html += getTypeEntry(types[k]);
+    }
+    return html;
+}
+
+function loadXSD() {
+    var xsdtext = document.getElementById('xsdtext').value;
+    var types = loadTypes(xsdtext);
+    // console.log(types);
+
+    var output = document.getElementById('output');
+    output.innerHTML = tempTypeHtml(types);
+}
+
 </script>
 </head>
 <body>
 
 
+<textarea id='xsdtext' style='width:100%;height:100px;'><?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+    <xs:simpleType name="Color">
+        <xs:annotation><xs:documentation>Eye color</xs:documentation></xs:annotation>
+        <xs:restriction type="xs:string">
+            <xs:enumeration name="BROWN" />
+            <xs:enumeration name="BLUE">
+                <xs:annotation><xs:documentation>Blue eyes are best</xs:documentation></xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration name="GREEN" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="Person">
+        <xs:annotation><xs:documentation>A human person</xs:documentation></xs:annotation>
+        <xs:sequence>
+            <xs:element name="name" type="xs:string" />
+            <xs:element name="birthYear" type="xs:int" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="eyeColor" type="Color" minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Robot">
+        <xs:sequence>
+            <xs:element name="model" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Character">
+        <xs:choice>
+            <xs:element name="person" type="Person" />
+            <xs:element name="robot" type="Robot" />
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:element name="rootElement" type="Character" />
+
+</xs:schema>
+</textarea>
+
+<input type=button value="Parse XSD" onclick='loadXSD();' />
+
+<div id='output'></div>
 
 </body>
 </html>
